@@ -3,16 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/jest": "24.0.12",
-    "@types/node": "11.13.8",
-    "@types/react": "16.8.15",
-    "@types/react-dom": "16.8.4",
-    "office-ui-fabric-react": "^6.174.0",
-    "@uifabric/fluent-theme": "^0.16.7",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "3.0.0",
-    "typescript": "3.4.5"
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.11.1",
+    "@types/react": "^16.9.33",
+    "@types/react-dom": "^16.9.6",
+    "@uifabric/fluent-theme": "^7.1.51",
+    "office-ui-fabric-react": "^7.105.12",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "^3.4.1",
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "start": "react-scripts start",
