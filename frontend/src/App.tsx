@@ -2,59 +2,63 @@ import React, { useState } from 'react';
 import { Stack, TextField, } from 'office-ui-fabric-react';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
 import { initializeIcons } from '@uifabric/icons';
+import { applyStyle } from './Style'
 export const App: React.FunctionComponent = () => {
-  const [text, setText] = useState('');
-
+  const [editorText, setEditorText] = useState('');
   initializeIcons();
+  const _items: ICommandBarItemProps[] = [
+    {
+      key: 'bold',
+      text: 'Bold',
+      iconProps: { iconName: 'Bold' },
+      onClick: () => {
+        console.log('Bold');
+        let editor = document.getElementById('editor') as HTMLTextAreaElement;
+        let textSelected = '';
+        textSelected = editor.value.substring(editor.selectionStart, editor.selectionEnd);
+        console.log(`Start: ${editor.selectionStart}, End: ${editor.selectionEnd}, Text: ${textSelected}`);
+        setEditorText(applyStyle('bold', editor.selectionStart, editor.selectionEnd, editor.value));
+      },
+    },
+    {
+      key: 'italic',
+      text: 'Italic',
+      iconProps: { iconName: 'Italic' },
+      onClick: () => console.log('Italic'),
+    },
+    {
+      key: 'underline',
+      text: 'Underline',
+      iconProps: { iconName: 'Underline' },
+      onClick: () => console.log('Underline'),
+    },
+  ];
+
   return (
     <Stack
       horizontal={false}
       verticalAlign='start'
-      verticalFill
-      disableShrink
       horizontalAlign='center'
+      verticalFill
     >
       <CommandBar
         items={_items}
       />
       <Stack
-        style={{ width: 740 }}
+        style={{ width: '100%', maxWidth: 740 }}
       >
         <EditField label="Editor"
-          text={text}
-          setText={setText}
+          text={editorText}
+          setText={setEditorText}
         />
       </Stack>
     </Stack>
   );
+
 };
 
-const _items: ICommandBarItemProps[] = [
-  {
-    key: 'bold',
-    text: 'Bold',
-    iconProps: { iconName: 'Bold' },
-    onClick: () => {
-      console.log('Bold');
-      let editor = document.getElementById('editor') as HTMLTextAreaElement;
-      let textSelected = '';
-      textSelected = editor.value.substring(editor.selectionStart, editor.selectionEnd);
-      console.log(`Start: ${editor.selectionStart}, End: ${editor.selectionEnd}, Text: ${textSelected}`);
-    },
-  },
-  {
-    key: 'italic',
-    text: 'Italic',
-    iconProps: { iconName: 'Italic' },
-    onClick: () => console.log('Italic'),
-  },
-  {
-    key: 'underline',
-    text: 'Underline',
-    iconProps: { iconName: 'Underline' },
-    onClick: () => console.log('Underline'),
-  },
-];
+
+
 
 type EditFieldProps = {
   label: string
