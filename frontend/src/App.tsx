@@ -1,49 +1,74 @@
-import React from 'react';
-import { Stack, Text, Link, FontWeights } from 'office-ui-fabric-react';
-
-const boldStyle = { root: { fontWeight: FontWeights.semibold } };
-
+import React, { useState } from 'react';
+import { Stack, TextField, } from 'office-ui-fabric-react';
+import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+import { initializeIcons } from '@uifabric/icons';
 export const App: React.FunctionComponent = () => {
+  const [text, setText] = useState('');
+
+  initializeIcons();
   return (
     <Stack
-      horizontalAlign="center"
-      verticalAlign="center"
+      horizontal={false}
+      verticalAlign='start'
       verticalFill
-      styles={{
-        root: {
-          width: '960px',
-          margin: '0 auto',
-          textAlign: 'center',
-          color: '#605e5c'
-        }
-      }}
-      gap={15}
+      disableShrink
+      horizontalAlign='center'
     >
-      <img
-        src="https://raw.githubusercontent.com/Microsoft/just/master/packages/just-stack-uifabric/template/src/components/fabric.png"
-        alt="logo"
+      <CommandBar
+        items={_items}
       />
-      <Text variant="xxLarge" styles={boldStyle}>
-        Welcome to Your UI Fabric App
-      </Text>
-      <Text variant="large">For a guide on how to customize this project, check out the UI Fabric documentation.</Text>
-      <Text variant="large" styles={boldStyle}>
-        Essential Links
-      </Text>
-      <Stack horizontal gap={15} horizontalAlign="center">
-        <Link href="https://developer.microsoft.com/en-us/fabric">Docs</Link>
-        <Link href="https://stackoverflow.com/questions/tagged/office-ui-fabric">Stack Overflow</Link>
-        <Link href="https://github.com/officeDev/office-ui-fabric-react/">Github</Link>
-        <Link href="https://twitter.com/officeuifabric">Twitter</Link>
-      </Stack>
-      <Text variant="large" styles={boldStyle}>
-        Design System
-      </Text>
-      <Stack horizontal gap={15} horizontalAlign="center">
-        <Link href="https://developer.microsoft.com/en-us/fabric#/styles/icons">Icons</Link>
-        <Link href="https://developer.microsoft.com/en-us/fabric#/styles/typography">Typography</Link>
-        <Link href="https://developer.microsoft.com/en-us/fabric#/styles/themegenerator">Theme</Link>
+      <Stack
+        style={{ width: 740 }}
+      >
+        <EditField label="Editor"
+          text={text}
+          setText={setText}
+        />
       </Stack>
     </Stack>
   );
 };
+
+const _items: ICommandBarItemProps[] = [
+  {
+    key: 'bold',
+    text: 'Bold',
+    iconProps: { iconName: 'Bold' },
+    onClick: () => {
+      console.log('Bold');
+      let editor = document.getElementById('editor') as HTMLTextAreaElement;
+      let textSelected = '';
+      textSelected = editor.value.substring(editor.selectionStart, editor.selectionEnd);
+      console.log(`Start: ${editor.selectionStart}, End: ${editor.selectionEnd}, Text: ${textSelected}`);
+    },
+  },
+  {
+    key: 'italic',
+    text: 'Italic',
+    iconProps: { iconName: 'Italic' },
+    onClick: () => console.log('Italic'),
+  },
+  {
+    key: 'underline',
+    text: 'Underline',
+    iconProps: { iconName: 'Underline' },
+    onClick: () => console.log('Underline'),
+  },
+];
+
+type EditFieldProps = {
+  label: string
+  text: string
+  setText: any
+}
+export const EditField = ({ label, text, setText }: EditFieldProps) => (
+  <TextField
+    label={label}
+    multiline
+    autoAdjustHeight
+    resizable={false}
+    value={text}
+    onChange={(event) => setText((event.target as HTMLInputElement).value)}
+    id='editor'
+  />
+);
