@@ -1,37 +1,71 @@
-function detectType(char: string) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    const numbers = '0123456789';
-    if (chars.indexOf(char) !== -1) {
-        return 'regularLetter';
-    }
-    else if (numbers.indexOf(char) !== -1) {
-        return 'regularNumber';
-    }
+const UtfString = require('utfstring');
 
+function detectStyle(char: string) {
+    const regular = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const bold = '𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗';
+    const italic = '𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧';
+    if (UtfString.indexOf(regular, char) !== -1) {
+        return 'regular';
+    }
+    else if (UtfString.indexOf(bold, char) !== -1) {
+        return 'bold';
+    }
+    else if (UtfString.indexOf(italic, char) !== -1) {
+        return 'italic';
+    }
     return 'other';
 }
 
-function convertLetter(style: string, char: string) {
+function detectClass(char: string) {
+    const letter = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧';
+    const number = '0123456789𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗';
+    if (UtfString.indexOf(letter, char) !== -1) {
+        return 'letter';
+    }
+    else if (UtfString.indexOf(number, char) !== -1) {
+        return 'number';
+    }
+    return 'other';
+}
+function convertLetter(fromStyle: string, toStyle: string, char: string) {
+    let chars = '';
     let offset = 0;
-    if (style === 'bold') {
+    if (fromStyle === toStyle) {
+        toStyle = 'regular';
+    }
+
+    if (fromStyle === 'regular') {
+        chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    }
+    else if (fromStyle === 'bold') {
+        chars = '𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳';
+    }
+    else if (fromStyle === 'italic') {
+        chars = '𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧';
+    }
+
+    if (toStyle === 'regular') {
+        offset = 0x0041;
+    }
+    else if (toStyle === 'bold') {
         offset = 0x1D400;
     }
-    else if (style === 'italic') {
+    else if (toStyle === 'italic') {
         offset = 0x1D434;
-        if (char === 'h') {
-            // Italic h is located elsewhere
-            return String.fromCodePoint(0x210E);
+        if (char === 'h' || char === '𝐡') {
+            // Italic lowercase h doen't match pattern
+            return UtfString.fromCharCode(0x210E);
         }
     }
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    return String.fromCodePoint(chars.indexOf(char[0]) + offset);
+
+    return UtfString.fromCharCode(UtfString.indexOf(chars, UtfString.charAt(char, 0)) + offset);
 }
-function convertNumber(style: string, char: string) {
+function convertNumber(fromStyle: string, toStyle: string, char: string) {
     let offset = 0;
-    if (style === 'bold') {
+    if (toStyle === 'bold') {
         offset = 0x1D7CE;
     }
-    else if (style === 'italic') {
+    else if (toStyle === 'italic') {
         // Normal - there are no italic digits
         offset = 0x00030;
     }
@@ -39,16 +73,21 @@ function convertNumber(style: string, char: string) {
     return String.fromCodePoint(numbers.indexOf(char[0]) + offset);
 }
 
-function convert(style: string, input: string) {
-    let output = input.split('');
+function convert(toStyle: string, input: string) {
+    let output = [];
 
-    for (let i = 0; i < input.length; ++i) {
-        let charType = detectType(input.charAt(i));
-        if (charType === 'regularLetter') {
-            output[i] = convertLetter(style, input.charAt(i));
+    for (let i = 0; i < UtfString.length(input); ++i) {
+        let charClass = detectClass(UtfString.charAt(input, i));
+        let fromStyle = detectStyle(UtfString.charAt(input, i));
+        console.log(fromStyle);
+        if (charClass === 'letter') {
+            output[i] = convertLetter(fromStyle, toStyle, UtfString.charAt(input, i));
         }
-        else if (charType === 'regularNumber') {
-            output[i] = convertNumber(style, input.charAt(i));
+        else if (charClass === 'letter') {
+            output[i] = convertNumber(fromStyle, toStyle, UtfString.charAt(input, i));
+        }
+        else {
+            output[i] = UtfString.charAt(input, i);
         }
     }
     return output.join('');
@@ -59,7 +98,7 @@ export function applyStyle(style: string, begin: number, end: number, input: str
     let after = input.substring(end, input.length);
     str = convert(style, str);
     let output = before + str + after;
-    console.log(input.length);
-    console.log(output.length);
+    console.log(UtfString.length(input));
+    console.log(UtfString.length(output));
     return output;
 }

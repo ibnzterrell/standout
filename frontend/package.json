@@ -13,7 +13,8 @@
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1",
     "serve": "^11.3.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "utfstring": "^2.0.1"
   },
   "scripts": {
     "start": "serve -s build",
