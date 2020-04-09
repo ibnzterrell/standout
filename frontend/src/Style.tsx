@@ -18,6 +18,10 @@ function convertLetter(style: string, char: string) {
     }
     else if (style === 'italic') {
         offset = 0x1D434;
+        if (char === 'h') {
+            // Italic h is located elsewhere
+            return String.fromCodePoint(0x210E);
+        }
     }
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     return String.fromCodePoint(chars.indexOf(char[0]) + offset);
@@ -28,6 +32,7 @@ function convertNumber(style: string, char: string) {
         offset = 0x1D7CE;
     }
     else if (style === 'italic') {
+        // Normal - there are no italic digits
         offset = 0x00030;
     }
     const numbers = '0123456789';
