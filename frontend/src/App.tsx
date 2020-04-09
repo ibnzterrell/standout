@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Text, Stack, TextField, } from 'office-ui-fabric-react';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
+import { Depths } from '@uifabric/fluent-theme/lib/fluent/FluentDepths';
 import { initializeIcons } from '@uifabric/icons';
 import { applyStyle } from './Style'
 export const App: React.FunctionComponent = () => {
@@ -52,7 +53,9 @@ export const App: React.FunctionComponent = () => {
       verticalFill
     >
       <Stack
-        style={{ width: '100%', maxWidth: 740 }}
+        verticalFill
+        padding='60px'
+        style={{ width: '100%', maxWidth: 800, boxShadow: Depths.depth4 }}
       >
         <Stack style={{ textAlign: 'center' }}>
           <Text variant='mega'>Standout Editor</Text>
@@ -60,12 +63,13 @@ export const App: React.FunctionComponent = () => {
 
         <CommandBar
           items={_items}
+          style={{ boxShadow: Depths.depth4 }}
         />
         <EditField label="Editor"
           text={editorText}
           setText={setEditorText}
         />
-        <Link href='https://www.linkedin.com/in/ibnzterrell/'>Linkedin Profile Example</Link>
+        <Link target='_blank' href='https://www.linkedin.com/in/ibnzterrell/'>Linkedin Profile Example</Link>
       </Stack>
     </Stack >
   );
