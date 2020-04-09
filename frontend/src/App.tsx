@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Stack, TextField, } from 'office-ui-fabric-react';
+import { Link, Text, Stack, TextField, } from 'office-ui-fabric-react';
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
 import { initializeIcons } from '@uifabric/icons';
 import { applyStyle } from './Style'
@@ -51,18 +51,23 @@ export const App: React.FunctionComponent = () => {
       horizontalAlign='center'
       verticalFill
     >
-      <CommandBar
-        items={_items}
-      />
       <Stack
         style={{ width: '100%', maxWidth: 740 }}
       >
+        <Stack style={{ textAlign: 'center' }}>
+          <Text variant='mega'>Standout Editor</Text>
+        </Stack>
+
+        <CommandBar
+          items={_items}
+        />
         <EditField label="Editor"
           text={editorText}
           setText={setEditorText}
         />
+        <Link href='https://www.linkedin.com/in/ibnzterrell/'>Linkedin Profile Example</Link>
       </Stack>
-    </Stack>
+    </Stack >
   );
 
 };
@@ -79,6 +84,7 @@ export const EditField = ({ label, text, setText }: EditFieldProps) => (
   <TextField
     label={label}
     multiline
+    rows={5}
     autoAdjustHeight
     resizable={false}
     value={text}
