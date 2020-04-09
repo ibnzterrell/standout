@@ -5,6 +5,14 @@ import { initializeIcons } from '@uifabric/icons';
 import { applyStyle } from './Style'
 export const App: React.FunctionComponent = () => {
   const [editorText, setEditorText] = useState('');
+
+  function applyEditorStyle(style: string) {
+    let editor = document.getElementById('editor') as HTMLTextAreaElement;
+    let textSelected = '';
+    textSelected = editor.value.substring(editor.selectionStart, editor.selectionEnd);
+    console.log(`Start: ${editor.selectionStart}, End: ${editor.selectionEnd}, Text: ${textSelected}`);
+    setEditorText(applyStyle(style, editor.selectionStart, editor.selectionEnd, editor.value));
+  }
   initializeIcons();
   const _items: ICommandBarItemProps[] = [
     {
@@ -13,25 +21,27 @@ export const App: React.FunctionComponent = () => {
       iconProps: { iconName: 'Bold' },
       onClick: () => {
         console.log('Bold');
-        let editor = document.getElementById('editor') as HTMLTextAreaElement;
-        let textSelected = '';
-        textSelected = editor.value.substring(editor.selectionStart, editor.selectionEnd);
-        console.log(`Start: ${editor.selectionStart}, End: ${editor.selectionEnd}, Text: ${textSelected}`);
-        setEditorText(applyStyle('bold', editor.selectionStart, editor.selectionEnd, editor.value));
+        applyEditorStyle('bold');
       },
     },
     {
       key: 'italic',
       text: 'Italic',
       iconProps: { iconName: 'Italic' },
-      onClick: () => console.log('Italic'),
+      onClick: () => {
+        console.log('Italic');
+        applyEditorStyle('italic');
+      },
+
     },
+    /*
     {
       key: 'underline',
       text: 'Underline',
       iconProps: { iconName: 'Underline' },
       onClick: () => console.log('Underline'),
     },
+    */
   ];
 
   return (

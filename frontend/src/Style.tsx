@@ -1,39 +1,60 @@
-function codePoint(char: string) {
-    return char.codePointAt(0) as number;
-}
-
 function detectType(char: string) {
-    let point = codePoint(char);
-    if (point >= codePoint('A') && point <= codePoint('Z')) {
-        return 'uppercase';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
+    if (chars.indexOf(char) !== -1) {
+        return 'regularLetter';
     }
-    else if (point >= codePoint('a') && point <= codePoint('z')) {
-        return 'lowercase';
+    else if (numbers.indexOf(char) !== -1) {
+        return 'regularNumber';
     }
-    return 'unknown';
-}
-function convertBold(input: string) {
-    let offsetUppercase = codePoint('𝗔') - codePoint('A');
-    let offsetLowercase = codePoint('𝗮') - codePoint('a');
 
+    return 'other';
+}
+
+function convertLetter(style: string, char: string) {
+    let offset = 0;
+    if (style === 'bold') {
+        offset = 0x1D400;
+    }
+    else if (style === 'italic') {
+        offset = 0x1D434;
+    }
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    return String.fromCodePoint(chars.indexOf(char[0]) + offset);
+}
+function convertNumber(style: string, char: string) {
+    let offset = 0;
+    if (style === 'bold') {
+        offset = 0x1D7CE;
+    }
+    else if (style === 'italic') {
+        offset = 0x00030;
+    }
+    const numbers = '0123456789';
+    return String.fromCodePoint(numbers.indexOf(char[0]) + offset);
+}
+
+function convert(style: string, input: string) {
     let output = input.split('');
+
     for (let i = 0; i < input.length; ++i) {
         let charType = detectType(input.charAt(i));
-        if (charType === 'uppercase') {
-            output[i] = String.fromCodePoint(codePoint(input.charAt(i)) + offsetUppercase);
+        if (charType === 'regularLetter') {
+            output[i] = convertLetter(style, input.charAt(i));
         }
-        else if (charType === 'lowercase') {
-            output[i] = String.fromCodePoint(codePoint(input.charAt(i)) + offsetLowercase);
+        else if (charType === 'regularNumber') {
+            output[i] = convertNumber(style, input.charAt(i));
         }
     }
     return output.join('');
 }
-
 export function applyStyle(style: string, begin: number, end: number, input: string) {
     let before = input.substring(0, begin);
     let str = input.substring(begin, end);
     let after = input.substring(end, input.length);
-    str = convertBold(str);
+    str = convert(style, str);
     let output = before + str + after;
+    console.log(input.length);
+    console.log(output.length);
     return output;
 }
