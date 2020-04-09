@@ -44,8 +44,14 @@ function convertLetter(fromStyle: string, toStyle: string, char: string) {
         chars = '𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧';
     }
 
+    let index = UtfString.indexOf(chars, UtfString.charAt(char, 0));
     if (toStyle === 'regular') {
         offset = 0x0041;
+        if (index > 25) {
+            // Lowercase regular offset is higher
+            index -= 26;
+            offset = 0x0061;
+        }
     }
     else if (toStyle === 'bold') {
         offset = 0x1D400;
@@ -58,19 +64,34 @@ function convertLetter(fromStyle: string, toStyle: string, char: string) {
         }
     }
 
-    return UtfString.fromCharCode(UtfString.indexOf(chars, UtfString.charAt(char, 0)) + offset);
+    return UtfString.fromCharCode(index + offset);
 }
 function convertNumber(fromStyle: string, toStyle: string, char: string) {
+    let chars = '';
     let offset = 0;
-    if (toStyle === 'bold') {
+    if (fromStyle === toStyle) {
+        toStyle = 'regular';
+    }
+
+    if (toStyle === 'italic') {
+        // Normal - there are no italic digits
+        toStyle = 'regular';
+    }
+
+    if (fromStyle === 'regular') {
+        chars = '0123456789';
+    }
+    else if (fromStyle === 'bold') {
+        chars = '𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗';
+    }
+
+    if (toStyle === 'regular') {
+        offset = 0x0030;
+    }
+    else if (toStyle === 'bold') {
         offset = 0x1D7CE;
     }
-    else if (toStyle === 'italic') {
-        // Normal - there are no italic digits
-        offset = 0x00030;
-    }
-    const numbers = '0123456789';
-    return String.fromCodePoint(numbers.indexOf(char[0]) + offset);
+    return UtfString.fromCharCode(UtfString.indexOf(chars, UtfString.charAt(char, 0)) + offset);
 }
 
 function convert(toStyle: string, input: string) {
@@ -83,7 +104,7 @@ function convert(toStyle: string, input: string) {
         if (charClass === 'letter') {
             output[i] = convertLetter(fromStyle, toStyle, UtfString.charAt(input, i));
         }
-        else if (charClass === 'letter') {
+        else if (charClass === 'number') {
             output[i] = convertNumber(fromStyle, toStyle, UtfString.charAt(input, i));
         }
         else {
