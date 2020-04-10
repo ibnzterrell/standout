@@ -6,13 +6,19 @@ import { initializeIcons } from '@uifabric/icons';
 import { applyStyle } from './Style'
 
 export const App: React.FunctionComponent = () => {
-  const [editorText, setEditorText] = useState('');
+  const initEditorText = window.localStorage.getItem('editorText') || '';
+  const [editorText, setEditorText] = useState(initEditorText);
+
+  function saveEditorText(text: string) {
+    setEditorText(text);
+    window.localStorage.setItem('editorText', text);
+  }
   function applyEditorStyle(style: string) {
     let editor = document.getElementById('editor') as HTMLTextAreaElement;
     let textSelected = '';
     textSelected = editor.value.substring(editor.selectionStart, editor.selectionEnd);
     console.log(`Start: ${editor.selectionStart}, End: ${editor.selectionEnd}, Text: ${textSelected}`);
-    setEditorText(applyStyle(style, editor.selectionStart, editor.selectionEnd, editor.value));
+    saveEditorText(applyStyle(style, editor.selectionStart, editor.selectionEnd, editor.value));
   }
   initializeIcons();
   const _items: ICommandBarItemProps[] = [
@@ -88,7 +94,7 @@ export const App: React.FunctionComponent = () => {
         >
           <EditField label="Editor"
             text={editorText}
-            setText={setEditorText}
+            setText={saveEditorText}
           />
 
         </Stack>
