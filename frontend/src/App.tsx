@@ -33,7 +33,6 @@ export const App: React.FunctionComponent = () => {
         console.log('Italic');
         applyEditorStyle('italic');
       },
-
     },
     /*
     {
@@ -43,6 +42,15 @@ export const App: React.FunctionComponent = () => {
       onClick: () => console.log('Underline'),
     },
     */
+    {
+      key: 'clear',
+      text: 'Clear',
+      iconProps: { iconName: 'ClearFormatting' },
+      onClick: () => {
+        console.log('ClearFormatting');
+        applyEditorStyle('regular');
+      },
+    },
   ];
 
   return (
@@ -58,7 +66,7 @@ export const App: React.FunctionComponent = () => {
         style={{ width: '100%', maxWidth: 800, boxShadow: Depths.depth4 }}
       >
         <Stack style={{ textAlign: 'center' }}>
-          <Text variant='mega'>Standout Editor</Text>
+          <Text variant='mega'>Standout</Text>
         </Stack>
 
         <CommandBar
@@ -69,11 +77,13 @@ export const App: React.FunctionComponent = () => {
           text={editorText}
           setText={setEditorText}
         />
-        <Link target='_blank' href='https://www.linkedin.com/in/ibnzterrell/'>Linkedin Profile Example</Link>
+        <Stack horizontalAlign='center'>
+          <Text>Designed by <Link target='_blank' href='https://github.com/ibnzterrell/'>Terrell Ibanez</Link></Text>
+          <Link target='_blank' href='https://github.com/ibnzterrell/standout/'>Source Code on Github</Link>
+        </Stack>
       </Stack>
     </Stack >
   );
-
 };
 
 
