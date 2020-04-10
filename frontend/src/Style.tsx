@@ -91,21 +91,24 @@ function convertNumber(fromStyle: string, toStyle: string, char: string) {
 }
 
 function convert(toStyle: string, input: string) {
-    let output = [];
-    console.log(UtfString.indexOf('', ' '));
+    let output = UtfString.stringToCodePoints(input);
+
     for (let i = 0; i < UtfString.length(input); ++i) {
-        let charClass = detectClass(UtfString.charAt(input, i));
-        let fromStyle = detectStyle(UtfString.charAt(input, i));
+        let char = UtfString.fromCharCode(output[i]);
+        let charClass = detectClass(char);
+        let fromStyle = detectStyle(char);
+        console.log(`${UtfString.charAt(input, i)} ${charClass} ${fromStyle}`)
         if (charClass === 'letter') {
-            output[i] = convertLetter(fromStyle, toStyle, UtfString.charAt(input, i));
+            output[i] = convertLetter(fromStyle, toStyle, char);
         }
         else if (charClass === 'number') {
-            output[i] = convertNumber(fromStyle, toStyle, UtfString.charAt(input, i));
+            output[i] = convertNumber(fromStyle, toStyle, char);
         }
         else {
-            output[i] = UtfString.charAt(input, i);
+            output[i] = char;
         }
     }
+    console.log(output);
     return output.join('');
 }
 export function applyStyle(style: string, begin: number, end: number, input: string) {
