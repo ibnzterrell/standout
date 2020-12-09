@@ -7,14 +7,12 @@ By converting text to Unicode, we can use Bold and Italic even if the site / app
 The editor is written in React / TypeScript and Fluent UI.
 
 ## Try It Out
-https://standout.terrell.dev
+https://stanford.edu/~ibanezt/standout/
 
 ## How to Use
 Type/copy profile text into the editor box, highlight text and click a button to apply the corresponding format. When finished, copy it to your profile.
 
-
-
 ## Limitations
 The editor supports Bold for letters / numbers, and Italic for letters.
 
-NOTE: Any text that is styled (Bold or Italic) is NOT searchable!
+NOTE: Any text that is styled (Bold or Italic) may have issues with being searchable!
